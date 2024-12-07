@@ -66,3 +66,23 @@
     font-family: Geist, sans-serif;
   }
 }
+
+html {
+  font-size: 100%; /* Default font size */
+
+  @media (max-width: 1200px) {
+    font-size: 80%; /* Reduce font size for large screens */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 60%; /* Further reduce font size for medium screens */
+  }
+
+  @media (max-width: 480px) {
+    font-size: 40%; /* Further reduce font size for small screens */
+  }
+
+  @media (max-width: 380px) {
+    font-size: 30%; /* Further reduce font size for small screens */
+  }
+}

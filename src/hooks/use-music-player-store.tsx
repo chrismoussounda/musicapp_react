@@ -1,20 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Song } from "@/lib/interfaces";
 
 type PlayMode = "normal" | "repeat" | "repeat-one" | "shuffle";
 
 interface MusicPlayerState {
-  currentSong: Song | null;
+  songId: number;
   isPlaying: boolean;
-  currentTime: number;
   volume: number;
   playlistId: number;
   playMode: PlayMode;
 
-  setCurrentSong: (song: Song | null) => void;
+  setSongId: (songId: number) => void;
   setIsPlaying: (isPlaying: boolean) => void;
-  setCurrentTime: (time: number) => void;
   setVolume: (volume: number) => void;
   setPlaylistId: (playlistId: number) => void;
   setPlayMode: (mode: PlayMode) => void;
@@ -24,34 +21,27 @@ interface MusicPlayerState {
 export const useMusicPlayerStore = create<MusicPlayerState>()(
   persist(
     (set) => ({
-      currentSong: null,
+      songId: 0,
       isPlaying: false,
       currentTime: 0,
-      volume: 1,
+      volume: 50,
       playlistId: 0,
       playMode: "normal",
 
-      setCurrentSong: (song) => set({ currentSong: song, currentTime: 0 }),
-
+      setSongId: (songId) => set({ songId, isPlaying: true }),
       setIsPlaying: (isPlaying) => set({ isPlaying }),
-
-      setCurrentTime: (time) => set({ currentTime: time }),
-
       setVolume: (volume) => set({ volume }),
-
       setPlaylistId: (playlistId) =>
         set({
           playlistId,
-          currentSong: null,
+          songId: 0,
+          isPlaying: false,
         }),
-
       setPlayMode: (playMode) => set({ playMode }),
-
       resetPlayer: () =>
         set({
-          currentSong: null,
+          songId: 0,
           isPlaying: false,
-          currentTime: 0,
           playlistId: 0,
           playMode: "normal",
         }),
@@ -59,7 +49,7 @@ export const useMusicPlayerStore = create<MusicPlayerState>()(
     {
       name: "music-player-storage",
       partialize: (state) => ({
-        currentSong: state.currentSong,
+        songId: state.songId,
         volume: state.volume,
         playlistId: state.playlistId,
         playMode: state.playMode,

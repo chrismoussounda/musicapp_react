@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../axios";
-import { Playlist, Song } from "@/lib/interfaces";
+import { Playlist, Song } from "@/types";
 
 // Fetch all playlists
 export const usePlaylistsQuery = () => {
@@ -15,7 +15,7 @@ export const usePlaylistsQuery = () => {
 
 // Fetch single playlist with songs
 export const usePlaylistQuery = (playlistId: number) => {
-  return useQuery<Playlist & { songs: Song[] }>({
+  return useQuery<Playlist>({
     queryKey: ["playlist", playlistId],
     queryFn: async () => {
       const { data } = await axiosInstance.get(`/playlists/${playlistId}`);
@@ -23,6 +23,22 @@ export const usePlaylistQuery = (playlistId: number) => {
     },
     enabled: !!playlistId,
   });
+};
+
+// Shuffle playlist songs
+export const useShufflePlaylist = (playlistId: number) => {
+  const query = useQueryClient();
+  return () => {
+    let songs: Song[] = [];
+    query.setQueryData(["playlist", playlistId], (oldPlaylist: Playlist) => {
+      songs = oldPlaylist.songs.sort(() => Math.random() - 0.5);
+      return {
+        ...oldPlaylist,
+        songs,
+      };
+    });
+    return songs;
+  };
 };
 
 // Create new playlist

@@ -10,6 +10,25 @@ This project is the frontend of the Music Player Application, built using React 
 - **React Query**: Data fetching and caching.
 - **Axios**: Promise-based HTTP client for making API requests.
 - **Tailwind CSS**: Utility-first CSS framework for styling.
+- **Recently Played Songs**: Track and display the last 10 songs played with timestamps.
+- **Improved Song Table**: Enhanced interactions with sortable and resizable columns.
+- **Time Since Functionality**: Display human-readable time since last played.
+
+## To-Do
+
+- **Comprehensive Error Handling**: Implement more robust error handling throughout the app.
+- **Advanced Play Mode Logic**: Enhance the play mode functionality with additional options.
+- **Performance Benchmarking**: Conduct performance tests and optimizations.
+- **Accessibility Enhancements**: Improve accessibility features for a better user experience.
+- **Testing**: Add unit and integration tests for critical components.
+- **Code Refactoring**: Review and refactor code for better readability and maintainability.
+- **Modularization**: Break down large components into smaller, reusable ones.
+- **Documentation**: Improve inline comments and documentation for better developer understanding.
+- **UI/UX Improvements**: Enhance the user interface and user experience based on feedback.
+- **Optimize Search Functionality**: Improve search efficiency for larger datasets.
+- **Edge Case Handling**: Address edge cases in song playback and playlist management.
+- **Responsive Design**: Ensure consistent behavior across different devices and screen sizes.
+- **CRUD Operations**: Implement Update and Delete actions for songs and playlists.
 
 ## Getting Started
 
@@ -43,7 +62,7 @@ This project is the frontend of the Music Player Application, built using React 
    # or
    yarn start
    ```
-2. Open your browser and go to `http://localhost:3000` to view the app.
+2. Open your browser and go to the shown URL to view the app.
 
 ## Deployment
 

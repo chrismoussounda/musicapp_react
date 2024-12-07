@@ -2,7 +2,7 @@ import { Volume2 } from "lucide-react";
 import { Slider } from "./ui/slider";
 import { useMusicPlayerStore } from "@/hooks/use-music-player-store";
 
-const VolumeControl = () => {
+export const VolumeControl = () => {
   const { setVolume, volume } = useMusicPlayerStore();
   return (
     <div className="flex items-center space-x-2">
@@ -17,5 +17,3 @@ const VolumeControl = () => {
     </div>
   );
 };
-
-export default VolumeControl;

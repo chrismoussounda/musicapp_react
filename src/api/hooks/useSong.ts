@@ -1,27 +1,32 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '../axios';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { axiosInstance } from "../axios";
+import { Song } from "@/types";
 
-// Types (adjust as per your backend)
-interface Song {
-  id: number;
-  title: string;
-  artist: string;
-  album: string;
-  duration: number;
-  url?: string;
-  coverUrl?: string;
-  playlistId: number;
-}
-
-// Fetch songs in a playlist
-export const useSongsQuery = (playlistId: number) => {
+// Fetch all songs
+export const useSongsQuery = () => {
   return useQuery<Song[]>({
-    queryKey: ['songs', playlistId],
+    queryKey: ["songs"],
     queryFn: async () => {
-      const { data } = await axiosInstance.get(`/playlists/${playlistId}/songs`);
+      const { data } = await axiosInstance.get(`/songs`);
       return data;
     },
-    enabled: !!playlistId
+  });
+};
+
+// Fetch a single song
+export const useSongQuery = (songId: number) => {
+  const query = useQueryClient();
+  const lastPlayedSongId = query.getQueryData(["last-played-song"]) as number;
+  if (lastPlayedSongId !== songId) {
+    query.setQueryData(["last-played-song"], songId);
+  }
+  return useQuery<Song>({
+    queryKey: ["songs", songId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(`/songs/${songId}`);
+      return data;
+    },
+    enabled: !!songId,
   });
 };
 
@@ -30,13 +35,15 @@ export const useCreateSongMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (newSong: Omit<Song, 'id'>) => {
-      const { data } = await axiosInstance.post('/songs', newSong);
+    mutationFn: async (newSong: Omit<Song, "id">) => {
+      const { data } = await axiosInstance.post("/songs", newSong);
       return data;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['songs', variables.playlistId] });
-    }
+      queryClient.invalidateQueries({
+        queryKey: ["songs", variables.playlistId],
+      });
+    },
   });
 };
 
@@ -50,8 +57,10 @@ export const useUpdateSongMutation = () => {
       return data;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['songs', variables.playlistId] });
-    }
+      queryClient.invalidateQueries({
+        queryKey: ["songs", variables.playlistId],
+      });
+    },
   });
 };
 
@@ -60,12 +69,20 @@ export const useDeleteSongMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ songId, playlistId }: { songId: number; playlistId: number }) => {
+    mutationFn: async ({
+      songId,
+      playlistId,
+    }: {
+      songId: number;
+      playlistId: number;
+    }) => {
       await axiosInstance.delete(`/songs/${songId}`);
       return { songId, playlistId };
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['songs', variables.playlistId] });
-    }
+      queryClient.invalidateQueries({
+        queryKey: ["songs", variables.playlistId],
+      });
+    },
   });
 };
